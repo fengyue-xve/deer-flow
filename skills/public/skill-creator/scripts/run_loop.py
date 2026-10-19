@@ -33,9 +33,9 @@ def split_eval_set(eval_set: list[dict], holdout: float, seed: int = 42) -> tupl
     random.shuffle(trigger)
     random.shuffle(no_trigger)
 
-    # Calculate split points
-    n_trigger_test = max(1, int(len(trigger) * holdout))
-    n_no_trigger_test = max(1, int(len(no_trigger) * holdout))
+    # Reserve a training example in each class, even for tiny eval sets.
+    n_trigger_test = min(max(0, len(trigger) - 1), max(1, int(len(trigger) * holdout)))
+    n_no_trigger_test = min(max(0, len(no_trigger) - 1), max(1, int(len(no_trigger) * holdout)))
 
     # Split
     test_set = trigger[:n_trigger_test] + no_trigger[:n_no_trigger_test]
